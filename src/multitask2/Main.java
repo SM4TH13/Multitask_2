@@ -4,11 +4,12 @@ import java.util.function.Function;
 
 import com.github.forax.zen.Application;
 import com.github.forax.zen.ApplicationContext;
+
 import multitask2.controller.Controller;
 import multitask2.model.Game;
 import multitask2.model.Model;
-import multitask2.model.games.Balance;
 import multitask2.model.games.Avoid;
+import multitask2.model.games.Balance;
 import multitask2.view.GeneralView;
 import multitask2.view.Viewers;
 import multitask2.view.games.AvoidView;
@@ -22,11 +23,11 @@ import multitask2.view.games.GameView;
  * Cette classe crée l'interface graphique, le modèle partagé par les mini-jeux
  * et le contrôleur qui orchestre les mises à jour et le rendu. Elle enregistre
  * les mini-jeux avec leur vue respective.
- * </p>
+ * </p>q
  */
 public final class Main {
 
-  /**
+  /** 
    * Constructeur privé afin d'empêcher l'instanciation de cette classe
    * utilitaire.
    */
