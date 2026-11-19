@@ -63,7 +63,7 @@ public final class Balance implements Game {
   public boolean update(double dt, Input input, double difficulty) {
     Game.checkInput(dt, input, difficulty);
 
-    readInput(dt, input);
+    readInput(dt, input, difficulty);
     positionAndSpeed(dt, difficulty);
     return checkBorder();
   }
@@ -76,10 +76,15 @@ public final class Balance implements Game {
    * @param dt    durée du pas de simulation, en secondes
    * @param input état des entrées clavier
    */
-  private void readInput(double dt, Input input) {
+  private void readInput(double dt, Input input, double difficulty) {
     var dir = (input.isKeyDown(Key.LEFT) ? -1 : 0) + (input.isKeyDown(Key.RIGHT) ? 1 : 0);
     if (dir != 0) {
       tilt = Game.dontExceed(tilt + dir * TILT_SPEED_DEG_PER_SEC * dt, MAX_TILT_DEGREES);
+    } 
+    else {
+      var drift = 1.0 * dt;
+      var weightInfluence = (position / TRACK_HALF_LENGTH) * (1.0 + difficulty * 0.25) * dt;
+      tilt = Game.dontExceed(tilt + drift + weightInfluence, MAX_TILT_DEGREES);
     }
   }
 
@@ -94,7 +99,8 @@ public final class Balance implements Game {
   private void positionAndSpeed(double dt, double difficulty) {
     var acceleration = GRAVITY * Math.sin(Math.toRadians(tilt)) * (1 + difficulty / 4);
     speed += acceleration * dt;
-    speed *= FRICTION;
+    var damping = Math.max(0.0, 1.0 - (difficulty * 0.1 + 0.5));
+    speed *= Math.pow(damping, dt);
     position += speed * dt;
   }
 
