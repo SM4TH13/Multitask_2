@@ -24,6 +24,8 @@ public final class Avoid implements Game {
 
   /** Abscisse du bord droit de l'aire de jeu dans les coordonnées du modèle. */
   public static final double WIDTH = 100;
+  /** Abscisse du cntre de l'ecran */
+  public static final double CENTRE = WIDTH/2;
   /** Nombre de rangées disponibles pour le joueur et les missiles. */
   public static final int ROWS = 5;
 
@@ -32,23 +34,42 @@ public final class Avoid implements Game {
   /** Intervalle initial entre deux apparitions de missiles, en secondes. */
   private static final double BASE_SPAWN_INTERVAL = 1.5;
 
+  public enum Side{
+  	LEFT, RIGHT;  	
+  }
+  
   /**
    * Missile se déplaçant horizontalement sur une rangée fixe.
    *
    * @param x   position horizontale du missile dans les coordonnées du modèle
    * @param row indice de la rangée occupée par le missile
+   * @param side sens dans lequel le missile va attaquer
    */
-  public record Missile(double x, int row) {
+  public record Missile(double x, int row, Side side) {
 
-    /**
+  	private int signeSide() {
+  		return switch(side) {
+  		case LEFT -> -1;
+  		case RIGHT -> 1;
+  		}; 
+  	}
+  	
+  	private boolean centreReached() {
+  		return ((x - CENTRE) * signeSide()) >= 0;
+  	}
+  	
+  	/**
      * Crée un missile déplacé horizontalement, en conservant sa rangée.
      *
      * @param dx déplacement horizontal à ajouter à la position courante
      * @return nouvelle valeur immuable représentant le missile déplacé
      */
-    private Missile moveRight(double dx) {
-      return new Missile(x + dx, row);
+
+    private Missile move(double dx) {
+      return new Missile(x + signeSide() * dx, row, side);
     }
+    
+    
   }
 
   /** Rangée actuellement occupée par le joueur. */
@@ -72,6 +93,15 @@ public final class Avoid implements Game {
     super();
   }
 
+	public double startMissile(Side side) {
+		return switch(side) {
+		case LEFT -> WIDTH;
+		case RIGHT -> 0;
+		}; 
+	}
+
+  
+  
   /**
    * Traite les changements de rangée, fait apparaître et avance les missiles,
    * puis vérifie si l'un d'eux a atteint le joueur.
@@ -121,7 +151,8 @@ public final class Avoid implements Game {
     var spawnInterval = Math.max(0.45, BASE_SPAWN_INTERVAL - difficulty * 0.15);
     spawnTimer -= dt;
     if (spawnTimer < 0) {
-      missiles.add(new Missile(0.0, random.nextInt(ROWS)));
+    	Side side = random.nextBoolean() ? Side.LEFT : Side.RIGHT; // random LEFT ou RIGHT
+      missiles.add(new Missile(startMissile(side), random.nextInt(ROWS), side));
       spawnTimer = spawnInterval;
     }
   }
@@ -135,7 +166,7 @@ public final class Avoid implements Game {
    */
   private void moveMissiles(double dt, double difficulty) {
     var missileSpeed = BASE_MISSILE_SPEED + difficulty * 10;
-    missiles.replaceAll(m -> m.moveRight(dt * missileSpeed));
+    missiles.replaceAll(m -> m.move(dt * missileSpeed));
   }
 
   /**
@@ -146,10 +177,10 @@ public final class Avoid implements Game {
    * @return {@code false} si un missile a atteint le joueur ; {@code true} sinon
    */
   private boolean checkBorder() {
-    if (missiles.stream().anyMatch(m -> m.x >= WIDTH && m.row == row)) {
+    if (missiles.stream().anyMatch(m -> m.centreReached() && m.row == row)) {
       return false;
     }
-    missiles.removeIf(m -> m.x >= WIDTH);
+    missiles.removeIf(Missile::centreReached);
     return true;
   }
 
