@@ -46,16 +46,16 @@ public final class AvoidView implements GameView {
     var scaleX = area.width / Avoid.WIDTH;
     var scaleY = area.height / (2 * Avoid.ROWS);
     IntUnaryOperator rowToY = row -> area.y + (int) ((2 * Avoid.ROWS - 2 * row - 1) * scaleY);
+    var CenterX = area.x + (int) (Avoid.CENTRE * scaleX);
 
     graphics.setColor(new Color(120, 120, 140));
-    graphics.fillRect(area.x + area.width - 8, area.y, 8, area.height);
+    graphics.fillRect(CenterX, area.y, 14, area.height);
 
     var platformCenterY = rowToY.applyAsInt(avoider.row());
     var platformHalf = (int) scaleY;
     var platformWidth = 14;
     graphics.setColor(new Color(90, 200, 220));
-    graphics.fillRect(area.x + area.width - platformWidth, platformCenterY - platformHalf, platformWidth,
-        platformHalf * 2);
+    graphics.fillRect(CenterX, platformCenterY - platformHalf, platformWidth, platformHalf * 2);
 
     graphics.setColor(new Color(230, 90, 90));
     for (Avoid.Missile m : avoider.missiles()) {
