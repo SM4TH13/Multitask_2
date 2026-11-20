@@ -1,12 +1,21 @@
 package multitask2;
 
 import java.util.function.Function;
+import java.util.Optional;
 
 import com.github.forax.zen.Application;
 import com.github.forax.zen.ApplicationContext;
+<<<<<<< HEAD
+=======
+import com.github.forax.zen.Event;
+import com.github.forax.zen.KeyboardEvent;
+import com.github.forax.zen.PointerEvent;
+>>>>>>> origin/balance
 
 import multitask2.controller.Controller;
 import multitask2.model.Game;
+import multitask2.model.Menu;
+import multitask2.model.MenuItem;
 import multitask2.model.Model;
 import multitask2.model.games.Avoid;
 import multitask2.model.games.Balance;
@@ -58,8 +67,13 @@ public final class Main {
     var viewers = new Viewers();
     addGame(model, viewers, new Balance(), 0, BalanceView::new);
     addGame(model, viewers, new Avoid(), 5, AvoidView::new);
-
+    
     var view = new GeneralView(context, viewers);
+
+    if (!runMenu(context, view)) {
+      context.dispose();
+      return;
+    }
     var controller = new Controller(model, view, context);
 
     try {
@@ -67,6 +81,45 @@ public final class Main {
     } finally {
       context.dispose();
     }
+  }
+  
+  private static boolean runMenu(ApplicationContext context, GeneralView view) {
+    var menu = new Menu();
+    while (true) {
+      view.renderMenu(menu);
+      var choice = handleEvent(context.pollOrWaitEvent(16), menu, view);
+      if (choice.isPresent() && choice.get() == MenuItem.PLAY) {
+        return true;
+      }
+      if (choice.isPresent() && choice.get() == MenuItem.QUIT) {
+        return false;
+      }
+    }
+  }
+  
+  private static Optional<MenuItem> handleEvent(Event event, Menu menu, GeneralView view) {
+    return switch (event) {
+      case KeyboardEvent k when k.action() == KeyboardEvent.Action.KEY_PRESSED ->
+          handleKey(k.key(), menu);
+      case PointerEvent p -> handlePointer(p, menu, view);
+      case null, default -> Optional.empty();
+    };
+  }
+
+  private static Optional<MenuItem> handleKey(KeyboardEvent.Key key, Menu menu) {
+    return switch (key) {
+      case UP -> { menu.up(); yield Optional.empty(); }
+      case DOWN -> { menu.down(); yield Optional.empty(); }
+      case SPACE -> Optional.of(menu.selected());
+      case ESCAPE -> Optional.of(MenuItem.QUIT);
+      default -> Optional.empty();
+    };
+  }
+
+  private static Optional<MenuItem> handlePointer(PointerEvent p, Menu menu, GeneralView view) {
+    var hit = view.itemAt(menu, p.location().x(), p.location().y());
+    hit.ifPresent(menu::select);
+    return p.action() == PointerEvent.Action.POINTER_DOWN ? hit : Optional.empty();
   }
 
   /**

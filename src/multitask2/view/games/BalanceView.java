@@ -44,7 +44,7 @@ public final class BalanceView implements GameView {
 
     var centerX = area.x + area.width / 2;
     var centerY = area.y + area.height / 2;
-    var halfPlank = area.width / 2 - 15;
+    var halfPlank = area.width / 4 - 15;
 
     var tiltRad = Math.toRadians(balance.tilt());
     var dx = (int) (halfPlank * Math.cos(tiltRad));

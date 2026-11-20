@@ -1,16 +1,19 @@
 package multitask2.view;
 
-import com.github.forax.zen.ApplicationContext;
-
-import multitask2.model.Model;
-import multitask2.model.Slot;
-
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.util.Objects;
+import java.util.Optional;
+
+import com.github.forax.zen.ApplicationContext;
+
+import multitask2.model.Menu;
+import multitask2.model.MenuItem;
+import multitask2.model.Model;
+import multitask2.model.Slot;
 
 /**
  * Vue générale de la partie : dessine l'arrière-plan, le temps écoulé et une
@@ -26,6 +29,10 @@ public final class GeneralView implements View {
   private static final int PADDING = 10;
   /** Marge autour de la grille et de la zone d'informations, en pixels. */
   private static final int MARGIN = 70;
+  /** Ordonnée du haut de la première entrée du menu, en pixels. */
+  private static final int MENU_TOP = 150;
+  /** Hauteur de chaque entrée du menu, en pixels. */
+  private static final int MENU_ITEM_HEIGHT = 40;
 
   /**
    * Contexte graphique qui fournit la taille d'écran et réalise le rendu des
@@ -67,7 +74,6 @@ public final class GeneralView implements View {
     Objects.requireNonNull(model);
     context.renderFrame(graphics -> draw(graphics, model));
   }
-
   /**
    * Dessine le fond, l'affichage du temps puis la grille des mini-jeux. Les
    * cellules sont réparties sur un nombre de colonnes et de lignes visant une
@@ -159,5 +165,40 @@ public final class GeneralView implements View {
     var x = bounds.x + (bounds.width - fm.stringWidth(text)) / 2;
     var y = bounds.y + bounds.height / 2;
     graphics.drawString(text, x, y);
+  }
+  
+  public void renderMenu(Menu menu) {
+    Objects.requireNonNull(menu);
+    context.renderFrame(graphics -> drawMenu(graphics, menu));
+  }
+
+  private void drawMenu(Graphics2D graphics, Menu menu) {
+    graphics.setColor(BACKGROUND);
+    graphics.fillRect(0, 0, width, height);
+    graphics.setFont(graphics.getFont().deriveFont(Font.PLAIN, 22f));
+    var items = menu.items();
+    for (var i = 0; i < items.size(); i++) {
+      var item = items.get(i);
+      var selected = item == menu.selected();
+      graphics.setColor(selected ? Color.YELLOW : Color.WHITE);
+      var label = (selected ? "> " : "") + item.label();
+      var bounds = new Rectangle(0, 150 + i * 40, width, 40);
+      centerText(graphics, label, bounds);
+    }
+  }
+  
+  private Rectangle itemBounds(int index) {
+    return new Rectangle(0, MENU_TOP + index * MENU_ITEM_HEIGHT, width, MENU_ITEM_HEIGHT);
+  }
+
+  public Optional<MenuItem> itemAt(Menu menu, int x, int y) {
+    Objects.requireNonNull(menu);
+    var items = menu.items();
+    for (var i = 0; i < items.size(); i++) {
+      if (itemBounds(i).contains(x, y)) {
+        return Optional.of(items.get(i));
+      }
+    }
+    return Optional.empty();
   }
 }
