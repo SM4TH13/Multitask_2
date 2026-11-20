@@ -5,12 +5,9 @@ import java.util.Optional;
 
 import com.github.forax.zen.Application;
 import com.github.forax.zen.ApplicationContext;
-<<<<<<< HEAD
-=======
 import com.github.forax.zen.Event;
 import com.github.forax.zen.KeyboardEvent;
 import com.github.forax.zen.PointerEvent;
->>>>>>> origin/balance
 
 import multitask2.controller.Controller;
 import multitask2.model.Game;
@@ -21,6 +18,7 @@ import multitask2.model.games.Avoid;
 import multitask2.model.games.Balance;
 import multitask2.view.GeneralView;
 import multitask2.view.Viewers;
+import multitask2.view.View;
 import multitask2.view.games.AvoidView;
 import multitask2.view.games.BalanceView;
 import multitask2.view.games.GameView;
@@ -54,6 +52,26 @@ public final class Main {
     Application.run(GeneralView.BACKGROUND, Main::game);
   }
 
+  
+  private static void game(ApplicationContext context) {
+  	try {
+  		var viewers = new Viewers();
+  		var view = new GeneralView(context, viewers);
+  		if(runMenu(context, view)) {
+  			int score;
+  			do {
+  				score = partie(context, view, viewers);
+  			}while(runMenuEnd(context, view, score));
+  		}
+  	}finally {
+  		context.dispose();
+  		return;
+  	}
+  }
+  
+  
+  
+  
   /**
    * Construit les composants de la partie et exécute le contrôleur jusqu'à la fin
    * du jeu. <br>
@@ -62,31 +80,36 @@ public final class Main {
    *
    * @param context contexte graphique fourni par la bibliothèque Zen
    */
-  private static void game(ApplicationContext context) {
+  private static int partie(ApplicationContext context, View view, Viewers viewers) {
     var model = new Model();
-    var viewers = new Viewers();
     addGame(model, viewers, new Balance(), 0, BalanceView::new);
     addGame(model, viewers, new Avoid(), 5, AvoidView::new);
-    
-    var view = new GeneralView(context, viewers);
-
-    if (!runMenu(context, view)) {
-      context.dispose();
-      return;
-    }
     var controller = new Controller(model, view, context);
-
-    try {
-      controller.run();
-    } finally {
-      context.dispose();
-    }
+    controller.run();
+    return model.time();
   }
+  
+  
+  
   
   private static boolean runMenu(ApplicationContext context, GeneralView view) {
     var menu = new Menu();
     while (true) {
       view.renderMenu(menu);
+      var choice = handleEvent(context.pollOrWaitEvent(16), menu, view);
+      if (choice.isPresent() && choice.get() == MenuItem.PLAY) {
+        return true;
+      }
+      if (choice.isPresent() && choice.get() == MenuItem.QUIT) {
+        return false;
+      }
+    }
+  }
+  
+  private static boolean runMenuEnd(ApplicationContext context, GeneralView view, int score) {
+    var menu = new Menu();
+    while (true) {
+      view.renderMenuEnd(menu);
       var choice = handleEvent(context.pollOrWaitEvent(16), menu, view);
       if (choice.isPresent() && choice.get() == MenuItem.PLAY) {
         return true;

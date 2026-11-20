@@ -187,6 +187,27 @@ public final class GeneralView implements View {
     }
   }
   
+  public void renderMenuEnd(Menu menu) {
+    Objects.requireNonNull(menu);
+    context.renderFrame(graphics -> drawMenuEnd(graphics, menu));
+  }
+
+  private void drawMenuEnd(Graphics2D graphics, Menu menu) {
+    graphics.setColor(BACKGROUND);
+    graphics.fillRect(0, 0, width, height);
+    graphics.setFont(graphics.getFont().deriveFont(Font.PLAIN, 22f));
+    var items = menu.items();
+    for (var i = 0; i < items.size(); i++) {
+      var item = items.get(i);
+      var selected = item == menu.selected();
+      graphics.setColor(selected ? Color.YELLOW : Color.WHITE);
+      var text = item == MenuItem.PLAY ? "Rejouer" : item.label();
+      var label = (selected ? "> " : "") + text;
+      var bounds = new Rectangle(0, 150 + i * 40, width, 40);
+      centerText(graphics, label, bounds);
+    }
+  }
+  
   private Rectangle itemBounds(int index) {
     return new Rectangle(0, MENU_TOP + index * MENU_ITEM_HEIGHT, width, MENU_ITEM_HEIGHT);
   }
