@@ -1,12 +1,15 @@
 package multitask2.view;
 
 import java.awt.BasicStroke;
+
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.util.Objects;
 import java.util.Optional;
+
+import java.lang.StringBuilder;
 
 import com.github.forax.zen.ApplicationContext;
 
@@ -187,12 +190,12 @@ public final class GeneralView implements View {
     }
   }
   
-  public void renderMenuEnd(Menu menu) {
+  public void renderMenuEnd(Menu menu, int score) {
     Objects.requireNonNull(menu);
-    context.renderFrame(graphics -> drawMenuEnd(graphics, menu));
+    context.renderFrame(graphics -> drawMenuEnd(graphics, menu, score));
   }
 
-  private void drawMenuEnd(Graphics2D graphics, Menu menu) {
+  private void drawMenuEnd(Graphics2D graphics, Menu menu, int score) {
     graphics.setColor(BACKGROUND);
     graphics.fillRect(0, 0, width, height);
     graphics.setFont(graphics.getFont().deriveFont(Font.PLAIN, 22f));
@@ -206,6 +209,9 @@ public final class GeneralView implements View {
       var bounds = new Rectangle(0, 150 + i * 40, width, 40);
       centerText(graphics, label, bounds);
     }
+    StringBuilder label = new StringBuilder();
+    label.append("Score : " + score);
+    centerText(graphics, label.toString() , new Rectangle(0, 0, width, 80));
   }
   
   private Rectangle itemBounds(int index) {

@@ -109,7 +109,7 @@ public final class Main {
   private static boolean runMenuEnd(ApplicationContext context, GeneralView view, int score) {
     var menu = new Menu();
     while (true) {
-      view.renderMenuEnd(menu);
+      view.renderMenuEnd(menu, score);
       var choice = handleEvent(context.pollOrWaitEvent(16), menu, view);
       if (choice.isPresent() && choice.get() == MenuItem.PLAY) {
         return true;
