@@ -184,6 +184,9 @@ public final class GeneralView implements View {
       var item = items.get(i);
       var selected = item == menu.selected();
       graphics.setColor(selected ? Color.YELLOW : Color.WHITE);
+      if (item == MenuItem.HIGH_SCORES) {
+      	graphics.setColor(selected ? Color.GRAY : Color.WHITE);
+      }       	
       var label = (selected ? "> " : "") + item.label();
       var bounds = new Rectangle(0, 150 + i * 40, width, 40);
       centerText(graphics, label, bounds);

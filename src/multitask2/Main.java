@@ -57,11 +57,11 @@ public final class Main {
   	try {
   		var viewers = new Viewers();
   		var view = new GeneralView(context, viewers);
-  		if(runMenu(context, view)) {
+  		if(runMenu(context, view) == 1) {
   			int score;
   			do {
   				score = partie(context, view, viewers);
-  			}while(runMenuEnd(context, view, score));
+  			}while(runMenuEnd(context, view, score) == 1);
   		}
   	}finally {
   		context.dispose();
@@ -92,30 +92,42 @@ public final class Main {
   
   
   
-  private static boolean runMenu(ApplicationContext context, GeneralView view) {
+  private static int runMenu(ApplicationContext context, GeneralView view) {
     var menu = new Menu();
     while (true) {
       view.renderMenu(menu);
       var choice = handleEvent(context.pollOrWaitEvent(16), menu, view);
       if (choice.isPresent() && choice.get() == MenuItem.PLAY) {
-        return true;
+        return 1;
       }
+      /*if (choice.isPresent() && choice.get() == MenuItem.HELP) {
+      	//une fonction pour afficher les touches pour jouer
+        return runMenu(context, view);
+      }*/
       if (choice.isPresent() && choice.get() == MenuItem.QUIT) {
-        return false;
+        return 0;
       }
     }
   }
   
-  private static boolean runMenuEnd(ApplicationContext context, GeneralView view, int score) {
+  private static int runMenuEnd(ApplicationContext context, GeneralView view, int score) {
     var menu = new Menu();
     while (true) {
       view.renderMenuEnd(menu, score);
       var choice = handleEvent(context.pollOrWaitEvent(16), menu, view);
       if (choice.isPresent() && choice.get() == MenuItem.PLAY) {
-        return true;
+        return 1;
+      }/*
+      if (choice.isPresent() && choice.get() == MenuItem.HIGH_SCORES) {
+      	//une fonction pour afficher le meilleur score
+        return runMenuEnd(context, view, score);
       }
+      if (choice.isPresent() && choice.get() == MenuItem.HELP) {
+      	//une fonction pour afficher les touches pour jouer
+        return runMenuEnd(context, view, score);
+      }*/
       if (choice.isPresent() && choice.get() == MenuItem.QUIT) {
-        return false;
+        return 0;
       }
     }
   }
