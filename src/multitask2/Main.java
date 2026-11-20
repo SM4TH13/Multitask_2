@@ -23,7 +23,7 @@ import multitask2.view.games.GameView;
  * Cette classe crée l'interface graphique, le modèle partagé par les mini-jeux
  * et le contrôleur qui orchestre les mises à jour et le rendu. Elle enregistre
  * les mini-jeux avec leur vue respective.
- * </p>q
+ * </p>
  */
 public final class Main {
 
