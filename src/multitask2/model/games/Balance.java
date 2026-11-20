@@ -5,6 +5,7 @@ import com.github.forax.zen.KeyboardEvent.Key;
 import multitask2.controller.Input;
 import multitask2.model.Game;
 
+
 /**
  * Mini-jeu d'équilibre : le joueur incline une planche et doit empêcher une
  * bille de sortir de ses limites.

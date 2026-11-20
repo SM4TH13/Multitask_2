@@ -1,7 +1,7 @@
 package multitask2;
 
-import java.util.function.Function;
 import java.util.Optional;
+import java.util.function.Function;
 
 import com.github.forax.zen.Application;
 import com.github.forax.zen.ApplicationContext;
@@ -21,7 +21,6 @@ import multitask2.view.Viewers;
 import multitask2.view.games.AvoidView;
 import multitask2.view.games.BalanceView;
 import multitask2.view.games.GameView;
-
 /**
  * Point d'entrée de l'application de mini-jeux multitâches.
  *
