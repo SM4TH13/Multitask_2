@@ -16,11 +16,13 @@ import multitask2.model.MenuItem;
 import multitask2.model.Model;
 import multitask2.model.games.Avoid;
 import multitask2.model.games.Balance;
+import multitask2.model.games.Fly;
 import multitask2.view.GeneralView;
 import multitask2.view.Viewers;
 import multitask2.view.View;
 import multitask2.view.games.AvoidView;
 import multitask2.view.games.BalanceView;
+import multitask2.view.games.FlyView;
 import multitask2.view.games.GameView;
 
 /**
@@ -84,6 +86,7 @@ public final class Main {
     var model = new Model();
     addGame(model, viewers, new Balance(), 0, BalanceView::new);
     addGame(model, viewers, new Avoid(), 5, AvoidView::new);
+    addGame(model, viewers, new Fly(), 10, FlyView::new);
     var controller = new Controller(model, view, context);
     controller.run();
     return model.time();
