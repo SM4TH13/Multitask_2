@@ -1,7 +1,7 @@
 package multitask2;
 
-import java.util.function.Function;
 import java.util.Optional;
+import java.util.function.Function;
 
 import com.github.forax.zen.Application;
 import com.github.forax.zen.ApplicationContext;
@@ -18,8 +18,8 @@ import multitask2.model.games.Avoid;
 import multitask2.model.games.Balance;
 import multitask2.model.games.Fly;
 import multitask2.view.GeneralView;
-import multitask2.view.Viewers;
 import multitask2.view.View;
+import multitask2.view.Viewers;
 import multitask2.view.games.AvoidView;
 import multitask2.view.games.BalanceView;
 import multitask2.view.games.FlyView;
@@ -117,6 +117,11 @@ public final class Main {
     var menu = new Menu();
     while (true) {
       view.renderMenuEnd(menu, score);
+      try {
+      	Thread.sleep(3000); 
+      } catch (InterruptedException e) {
+      	Thread.currentThread().interrupt(); 
+      }
       var choice = handleEvent(context.pollOrWaitEvent(16), menu, view);
       if (choice.isPresent() && choice.get() == MenuItem.PLAY) {
         return 1;
