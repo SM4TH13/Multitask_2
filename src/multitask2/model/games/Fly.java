@@ -19,7 +19,7 @@ public final class Fly implements Game {
 
   public static final double FLY_CENTER = WIDTH/2;
   
-  private static final double BASE_OBSTACLE_SPEED = 15;
+  private static final double BASE_OBSTACLE_SPEED = 10;
   
   private static final double BASE_SPAWN_INTERVAL = 1.8;
 

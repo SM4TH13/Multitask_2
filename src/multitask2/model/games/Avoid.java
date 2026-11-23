@@ -30,7 +30,7 @@ public final class Avoid implements Game {
   public static final int ROWS = 5;
 
   /** Vitesse de déplacement initiale d'un missile, en unités par seconde. */
-  private static final double BASE_MISSILE_SPEED = 32;
+  private static final double BASE_MISSILE_SPEED = 15;
   /** Intervalle initial entre deux apparitions de missiles, en secondes. */
   private static final double BASE_SPAWN_INTERVAL = 1.5;
 
