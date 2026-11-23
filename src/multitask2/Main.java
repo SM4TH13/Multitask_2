@@ -115,13 +115,19 @@ public final class Main {
   
   private static int runMenuEnd(ApplicationContext context, GeneralView view, int score) {
     var menu = new Menu();
+    view.renderMenuEnd(menu, score);
+    try {
+    	Thread.sleep(3000); 
+    	while(context.pollEvent() != null) {
+    		
+    	}
+    } catch (InterruptedException e) {
+    	Thread.currentThread().interrupt(); 
+    }
+    context.pollOrWaitEvent(3000);
     while (true) {
       view.renderMenuEnd(menu, score);
-      try {
-      	Thread.sleep(3000); 
-      } catch (InterruptedException e) {
-      	Thread.currentThread().interrupt(); 
-      }
+
       var choice = handleEvent(context.pollOrWaitEvent(16), menu, view);
       if (choice.isPresent() && choice.get() == MenuItem.PLAY) {
         return 1;
