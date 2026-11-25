@@ -1,5 +1,7 @@
 package multitask2.view.games;
 
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.util.Objects;
@@ -32,5 +34,11 @@ public interface GameView {
     Objects.requireNonNull(graphics);
     Objects.requireNonNull(game);
     Objects.requireNonNull(area);
+  }
+  
+  static void showTouch(Graphics2D graphics, String touch, Rectangle area) {
+    graphics.setColor(new Color(50, 150, 255));
+    graphics.setFont(graphics.getFont().deriveFont(Font.PLAIN, 15f));
+    graphics.drawString(touch, area.x, area.y);
   }
 }

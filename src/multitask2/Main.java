@@ -84,9 +84,9 @@ public final class Main {
    */
   private static int partie(ApplicationContext context, View view, Viewers viewers) {
     var model = new Model();
-    //addGame(model, viewers, new Balance(), 0, BalanceView::new);
-    //addGame(model, viewers, new Avoid(), 5, AvoidView::new);
-    addGame(model, viewers, new Fly(), 0, FlyView::new);
+    addGame(model, viewers, new Balance(), 0, BalanceView::new);
+    addGame(model, viewers, new Avoid(), 5, AvoidView::new);
+    addGame(model, viewers, new Fly(), 10, FlyView::new);
     var controller = new Controller(model, view, context);
     controller.run();
     return model.time();
@@ -117,7 +117,7 @@ public final class Main {
     var menu = new Menu();
     view.renderMenuEnd(menu, score);
     try {
-    	Thread.sleep(3000); 
+    	Thread.sleep(1500); 
     	while(context.pollEvent() != null) {
     		
     	}

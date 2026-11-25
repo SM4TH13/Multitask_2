@@ -2,6 +2,7 @@ package multitask2.view.games;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.util.Objects;
@@ -16,6 +17,8 @@ public final class BalanceView implements GameView {
 
   /** État de jeu lu pour produire le dessin. */
   private final Balance balance;
+  
+  public final String touch = "LEFT | RIGHT";
 
   /**
    * Crée une vue associée au mini-jeu fourni.
@@ -65,5 +68,8 @@ public final class BalanceView implements GameView {
 
     graphics.setColor(Color.WHITE);
     graphics.fillOval(ballX - 7, ballY - 15, 14, 14);
+    
+    GameView.showTouch(graphics, touch, area);
+    
   }
 }

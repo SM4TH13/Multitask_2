@@ -1,6 +1,7 @@
 package multitask2.view.games;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.util.Objects;
@@ -13,6 +14,8 @@ public final class FlyView implements GameView {
   private static final Color FLY_COLOR = new Color(230, 90, 90);
 
   private static final Color WALL_COLOR = new Color(150, 150, 150);
+  
+  private final String touch = "SPACE";
 
   private final Fly fly;
 
@@ -30,6 +33,7 @@ public final class FlyView implements GameView {
     double scaleX = area.width / Fly.WIDTH;
     double scaleY = area.height / Fly.HEIGHT;
     
+    
     var width = (int) Math.ceil(Fly.OBSTACLE_WIDTH * scaleX);
     graphics.setColor(WALL_COLOR);
     for (var o : fly.obstacles()) {
@@ -46,5 +50,9 @@ public final class FlyView implements GameView {
     graphics.setColor(FLY_COLOR);
     graphics.fillOval(centerX - diameter / 2, centerY - diameter / 2, diameter, diameter);    
     
+    GameView.showTouch(graphics, touch, area);
+    
   }
+  
+  
 }

@@ -17,6 +17,7 @@ public final class AvoidView implements GameView {
   /** État du mini-jeu d'esquive lu pour produire le dessin. */
   private final Avoid avoider;
 
+  private final String touch = "UP | DOWN";
   /**
    * Crée une vue associée au mini-jeu fourni.
    *
@@ -64,5 +65,6 @@ public final class AvoidView implements GameView {
       graphics.fillOval(mx - 5, my - 3, 10, 6);
     }
     
+    GameView.showTouch(graphics, touch, area);
   }
 }

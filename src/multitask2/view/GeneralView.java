@@ -1,15 +1,12 @@
 package multitask2.view;
 
 import java.awt.BasicStroke;
-
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.util.Objects;
 import java.util.Optional;
-
-import java.lang.StringBuilder;
 
 import com.github.forax.zen.ApplicationContext;
 
@@ -231,4 +228,6 @@ public final class GeneralView implements View {
     }
     return Optional.empty();
   }
+  
+
 }

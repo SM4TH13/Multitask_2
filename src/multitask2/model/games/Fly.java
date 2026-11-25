@@ -112,7 +112,7 @@ public final class Fly implements Game {
   	var collision = obstacles.stream()
   													 .anyMatch(o -> o.checkFlyInObstacle() && !o.flyPassObstacle(altitude));
   	obstacles.removeIf(Obstacle::obstacleFinish);
-  	return !collision;
+  	return !collision;    
   }
 
   public double altitude() {
