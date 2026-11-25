@@ -66,4 +66,5 @@ public final class BalanceView implements GameView {
     graphics.setColor(Color.WHITE);
     graphics.fillOval(ballX - 7, ballY - 15, 14, 14);
   }
+  
 }
