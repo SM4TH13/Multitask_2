@@ -12,13 +12,13 @@ public final class FlyView implements GameView {
 	
   private static final Color FLY_COLOR = new Color(230, 90, 90);
 
-  private static final Color WALL_COLOR = new Color(75, 150, 50);
+  private static final Color WALL_COLOR = new Color(150, 150, 150);
 
   private final Fly fly;
 
   
   public FlyView(Fly fly) {
-    Objects.requireNonNull(fly);
+    Objects.requireNonNull(fly);  
     this.fly = fly;
     super();
   }
@@ -34,10 +34,10 @@ public final class FlyView implements GameView {
     graphics.setColor(WALL_COLOR);
     for (var o : fly.obstacles()) {
       int left = area.x + (int) (o.x() * scaleX);
-      int gapTop = area.y + area.height - (int) ((o.gapCenter() + o.gapSize() / 2) * scaleY);
-      int gapBottom = area.y + area.height - (int) ((o.gapCenter() - o.gapSize() / 2) * scaleY);
-      graphics.fillRect(left, area.y, width, gapTop - area.y);
-      graphics.fillRect(left, gapBottom, width, area.y + area.height - gapBottom);
+      int wallTop = area.y + area.height - (int) ((o.wallCenter() + o.wallSize() / 2) * scaleY);
+      int wallBottom = area.y + area.height - (int) ((o.wallCenter() - o.wallSize() / 2) * scaleY);
+      graphics.fillRect(left, wallTop, width, wallBottom - wallTop);
+      //graphics.fillRect(left, gapBottom, width, area.y + area.height - gapBottom);
     }
     
     int diameter = (int) (2 * Fly.FLY_HALF_SIZE * Math.min(scaleX, scaleY));

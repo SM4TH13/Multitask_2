@@ -23,23 +23,23 @@ public final class Fly implements Game {
   
   private static final double BASE_SPAWN_INTERVAL = 1.8;
 
-  private static final double GAPSIZE_INITIAL = 30;
+  private static final double WALL_SIZE_INITIAL = 15;
   
-  private static final double GAPSIZE_MIN = 10;
+  private static final double WALL_SIZE_MAX = 60;
   
-  public static final double OBSTACLE_WIDTH = 4;
+  public static final double OBSTACLE_WIDTH = 2;
 
   private static final double HEIGHT_GAIN_PER_SEC = 100;
   
   private static final double GRAVITY = 40;
   
-  public static final int FLY_HALF_SIZE = 3;
+  public static final int FLY_HALF_SIZE = 2;
   
   
-  public record Obstacle(double x, double gapCenter, double gapSize) {    
+  public record Obstacle(double x, double wallCenter, double wallSize) {    
   	
   	private Obstacle move(double dx) {
-  		return new Obstacle(x-dx, gapCenter, gapSize);
+  		return new Obstacle(x-dx, wallCenter, wallSize);
   	}
   	
   	private boolean checkFlyInObstacle() {
@@ -47,7 +47,7 @@ public final class Fly implements Game {
   	}
   	
   	private boolean flyPassObstacle(double altitude) {
-  		return ((altitude - FLY_HALF_SIZE) >= (gapCenter - gapSize/2)) && ((altitude + FLY_HALF_SIZE) <= (gapCenter + gapSize/2)); 
+  		return ((altitude + FLY_HALF_SIZE) <= (wallCenter - wallSize/2)) || ((altitude - FLY_HALF_SIZE) >= (wallCenter + wallSize/2)); 
   	}
   	
   	private boolean obstacleFinish() {
@@ -92,18 +92,18 @@ public final class Fly implements Game {
 
   private void spawnObstacle(double dt, double difficulty) {
     var spawnInterval = Math.max(0.45, BASE_SPAWN_INTERVAL - difficulty * 0.15);
-    var gapSize = Math.max(GAPSIZE_MIN, GAPSIZE_INITIAL - difficulty * 0.15);
+    var wallSize = Math.min(WALL_SIZE_MAX, WALL_SIZE_INITIAL + difficulty * 0.15);
     spawnTimer -= dt;
     if (spawnTimer < 0) {
-    	var gapCenter = (gapSize/2) + random.nextDouble(HEIGHT - gapSize);
-      obstacles.add(new Obstacle(WIDTH, gapCenter, gapSize));
+    	var wallCenter = (wallSize/2) + random.nextDouble(HEIGHT - wallSize);
+      obstacles.add(new Obstacle(WIDTH, wallCenter, wallSize));
       spawnTimer = spawnInterval;
     }
   }
 
 
   private void moveObstacle(double dt, double difficulty) {
-    var obstacleSpeed = BASE_OBSTACLE_SPEED + difficulty * 10;
+    var obstacleSpeed = BASE_OBSTACLE_SPEED + difficulty * 5;
     obstacles.replaceAll(o -> o.move(dt * obstacleSpeed));
   }
 
