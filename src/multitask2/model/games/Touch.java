@@ -1,6 +1,7 @@
 package multitask2.model.games;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -34,7 +35,6 @@ public final class Touch implements Game{
   private Random random;
   
   
-  
   public Touch() {
     playerX = 0;
     playerY = 0;
@@ -51,13 +51,12 @@ public final class Touch implements Game{
     clampPlayer();
     removeTouched();
     tickBlock(dt);
-    if(hasExpiredBlock()) {
-      return false;
-    }
     spawnIfNeeded(dt, difficulty);
-    return true;
+    return hasExpiredBlock();
   }
   
+
+
   private double currentPlayerSpeed(double difficulty) {
     double timeBonus = elapsedTime * SPEED_GAIN_PER_SECOND;
     double diffBonus = Math.max(0.0, difficulty - 1.0) * 5.0; // optionnel si difficulty est déjà utilisée
@@ -163,6 +162,6 @@ public final class Touch implements Game{
   }
   
   public List<Block> blocks(){
-    return blocks;
+    return Collections.unmodifiableList(blocks);
   }
 }

@@ -14,11 +14,15 @@ import multitask2.model.Game;
 import multitask2.model.Menu;
 import multitask2.model.MenuItem;
 import multitask2.model.Model;
-import multitask2.model.games.Touch;
+import multitask2.model.games.Avoid;
+import multitask2.model.games.Balance;
+import multitask2.model.games.Jump;
 import multitask2.view.GeneralView;
 import multitask2.view.Viewers;
+import multitask2.view.games.AvoidView;
+import multitask2.view.games.BalanceView;
 import multitask2.view.games.GameView;
-import multitask2.view.games.TouchView;
+import multitask2.view.games.JumpView;
 /**
  * Point d'entrée de l'application de mini-jeux multitâches.
  *
@@ -63,7 +67,7 @@ public final class Main {
     addGame(model, viewers, new Balance(), 0, BalanceView::new);
     addGame(model, viewers, new Avoid(), 5, AvoidView::new);
     */
-    addGame(model, viewers, new Touch(), 0, TouchView::new);
+    addGame(model, viewers, new Jump(), 0, JumpView::new);
     
     var view = new GeneralView(context, viewers);
 
